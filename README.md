@@ -12,3 +12,7 @@ cd into project's folder and type
 >bundle install
 
 That should install all dependencies
+
+# run
+To run type in at projects folder
+>rackup
