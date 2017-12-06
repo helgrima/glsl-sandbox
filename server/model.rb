@@ -192,9 +192,8 @@ class GlslDatabase
 private
 
     def connect_database
-        uri = URI.parse(ENV['MONGOHQ_URL'])
-        conn = Mongo::Connection.from_uri(ENV['MONGOHQ_URL'])
-        @db = conn.db(uri.path.gsub(/^\//, ''))
+        conn = Mongo::Connection.new("localhost", 27017)
+        @db = conn.db("glsl")
 
         @versions=@db.collection('versions')
         @code=@db.collection('code')
