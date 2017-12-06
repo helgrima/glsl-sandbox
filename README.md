@@ -22,6 +22,7 @@ That should install all dependencies
 Make sure that you install newer version of json gem but keep old versions of other gems
 
 # run
+Modify function initialize_cloudinary in model.rb to include your cloudinary api keys
 To run type in at projects folder
 >rackup
 
