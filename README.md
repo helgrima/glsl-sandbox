@@ -24,3 +24,5 @@ Make sure that you install newer version of json gem but keep old versions of ot
 # run
 To run type in at projects folder
 >rackup
+
+Point your browser to http://localhost:9292
