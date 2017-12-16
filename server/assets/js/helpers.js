@@ -174,3 +174,41 @@ function load_code(hash) {
 function setURL(fragment) {
 }
 
+function set_cookie(cookie, value, exp) {
+	var cookieExpDate = new Date();
+	var days = 1;
+	if(typeof exp != "undefined" && exp != null) {
+		days = Math.max(days, exp);
+	}
+	cookieExpDate.setDate(cookieExpDate.getDate() + days);
+	document.cookie = cookie + "=" + value.toString() + "; expires=" + cookieExpDate.toUTCString();
+}
+
+function get_cookie(cookie, type) {
+	var start = document.cookie.indexOf(cookie);
+	if(start == -1) {
+		return null;
+	}
+	var value = null;
+	var end = document.cookie.indexOf(";", start);
+	if(end == -1) {
+		value = document.cookie.substring(12).split("=")[1];
+	}
+	else {
+		var sub = document.cookie.substring(start, end);
+		value = sub.split("=")[1];
+	}
+	switch(type) {
+		case "string":
+			value = value;
+			break;
+		case "integer":
+			value = parseInt(value);
+			break;
+		case "float":
+			value = parseFloat(value);
+			break;
+
+	}
+	return value;
+}

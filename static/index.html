@@ -162,13 +162,22 @@ void main( void ) {
 
 			// Greetings to Iq/RGBA! ;)
 
-			var quality = 2, quality_levels = [ 0.5, 1, 2, 4, 8 ];
+			var quality = 2, quality_levels = [ 0.5, 1, 2, 4, 8, 16 ];
 			var toolbar, compileButton, fullscreenButton, compileTimer, errorLines = [];
 			var code, canvas, gl, buffer, currentProgram, vertexPosition, screenVertexPosition, panButton,
 			parameters = { startTime: Date.now(), time: 0, mouseX: 0.5, mouseY: 0.5, screenWidth: 0, screenHeight: 0 },
 			surface = { centerX: 0, centerY: 0, width: 1, height: 1, isPanning: false, isZooming: false, lastX: 0, lastY: 0 },
 			frontTarget, backTarget, screenProgram, getWebGL, resizer = {}, compileOnChangeCode = true;
 
+			
+			
+			if(get_cookie("quality", "float") == null) {
+				set_cookie("quality", quality);
+			}
+			else {
+				quality = get_cookie("quality", "float");
+			}
+			
 			init();
 			if (gl) { animate(); }
 
@@ -269,6 +278,7 @@ void main( void ) {
 					quality = quality_levels[ event.target.selectedIndex ];
 					onWindowResize();
 
+					set_cookie("quality", quality, 7);
 				}, false );
 
 				toolbar.appendChild( select );
