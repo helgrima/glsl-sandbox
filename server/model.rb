@@ -341,9 +341,9 @@ private
 
     def initialize_cloudinary
         Cloudinary.config do |config|
-            config.cloud_name = "df7bivaog"
-            config.api_key = "445164121323116"
-            config.api_secret = "oihqlmSePrId25A72zFBaoIzGlc"
+            config.cloud_name = ""
+            config.api_key = ""
+            config.api_secret = ""
           end   
     end
 end
