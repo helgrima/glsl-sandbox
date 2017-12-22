@@ -20,6 +20,7 @@ configure do
     $glsl=GlslDatabase.new
 
     EFFECTS_PER_PAGE=50
+    BASE_URL="http://localhost:9292/"
 end
 
 get '/' do
@@ -30,7 +31,7 @@ get '/' do
     end
 
     ef=$glsl.get_page(page, EFFECTS_PER_PAGE)
-
+    ef.base_url = BASE_URL
     GALLERY.result(ef.bind)
 end
 

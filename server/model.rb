@@ -1,5 +1,6 @@
 
 class Effects
+    attr_accessor :base_url
     def initialize(effects, extra={})
         @effects=effects
         @extra={
@@ -19,6 +20,14 @@ class Effects
 
     def extra
         @extra
+    end
+
+    def base_url=(url)
+        @base_url = url
+    end
+
+    def base_url()
+        @base_url
     end
 
     def previous_page
