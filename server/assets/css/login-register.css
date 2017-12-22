@@ -32,6 +32,10 @@ a:hover {
     width: 100%;
 }
 
+#login-wrapper  select {
+    font-size: larger;
+    width: 100%;
+}
 #login-wrapper  button {
     font-size: larger;
     width: 100%;
