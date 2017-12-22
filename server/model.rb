@@ -71,6 +71,93 @@ class Effect
 
 end
 
+class LogIn
+    attr_accessor :base_url
+    attr_accessor :handle
+    attr_accessor :password
+
+    def initialize(base_url)
+        @base_url=base_url
+    end
+
+    def bind
+        binding
+    end
+
+    def base_url=(url)
+        @base_url = url
+    end
+
+    def base_url()
+        @base_url
+    end
+
+    def handle=(handle)
+        @handle = handle
+    end
+
+    def handle()
+        @handle
+    end
+
+    def password=(password)
+        @password = password
+    end
+
+    def password()
+        @password
+    end
+
+end
+
+class Register
+    attr_accessor :base_url
+    attr_accessor :email
+    attr_accessor :handle
+    attr_accessor :password
+    
+    def initialize(base_url)
+        @base_url=base_url
+    end
+
+    def bind
+        binding
+    end
+
+    def base_url=(url)
+        @base_url = url
+    end
+
+    def base_url()
+        @base_url
+    end
+
+    def email=(email)
+        @email = email
+    end
+
+    def email()
+        @email
+    end
+
+    def handle=(handle)
+        @handle = handle
+    end
+
+    def handle()
+        @handle
+    end
+
+    def password=(password)
+        @password = password
+    end
+
+    def password()
+        @password
+    end
+
+end
+
 class GlslDatabase
     attr_accessor :use_cloudinary
     def initialize

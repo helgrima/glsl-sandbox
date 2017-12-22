@@ -1,0 +1,47 @@
+a {
+    color: #aaa;
+    text-decoration: none;
+    border-bottom: 1px solid #444;
+}
+
+a:hover {
+    color: #009DE9;
+    border-bottom: 1px solid #009DE9;
+}
+
+#login-wrapper {
+    width: 30%;
+    margin: auto;
+}
+
+#login-wrapper h1 {
+    text-align: center;
+}
+
+#login-wrapper  label {
+    font-size: larger;
+}
+
+#login-wrapper .separate {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+#login-wrapper  input {
+    font-size: larger;
+    width: 100%;
+}
+
+#login-wrapper  button {
+    font-size: larger;
+    width: 100%;
+    background-color: rgb(40, 77, 4);
+    color: #ffffff;
+    border: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#links-and-controls {
+    margin-top: 10px;
+}

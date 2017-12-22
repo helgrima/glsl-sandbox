@@ -17,6 +17,8 @@ configure do
 
     GALLERY=ERB.new(File.read('server/assets/gallery.html'))
     EFFECT=ERB.new(File.read("server/assets/index.html"))
+    LOGIN=ERB.new(File.read("server/assets/login.html"))
+    REGISTER=ERB.new(File.read("server/assets/register.html"))
 
     $glsl=GlslDatabase.new
 
@@ -64,7 +66,23 @@ get '/diff' do
     send_file 'server/assets/diff.html'
 end
 
+get "/login" do
+    li=LogIn.new(BASE_URL)
+    LOGIN.result(li.bind)
+end
 
+post "/login" do
+    # login user here
+end
+
+get "/register" do
+    r=Register.new(BASE_URL)
+    REGISTER.result(r.bind)
+end
+
+post "/register" do
+    # register user here
+end
 # redirects
 
 get '/new' do
