@@ -7,3 +7,24 @@
 .cm-s-default span.cm-qualifier {color: #888;}
 .cm-s-default span.cm-builtin {color: #fbf;}
 .cm-s-default span.cm-bracket {color: #bbb;}
+
+body {
+    background-color: #000000;
+    font: 13px Tahoma, Arial, Helvetica, sans-serif;
+    margin: 3em 4em;
+    color: #888;
+}
+
+
+h1, h1 a, h2{
+    color: #009DE9;
+    font: 28px Tahoma, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    margin-bottom: 7px;
+}
+h2{ 
+    font-size: 22px;
+    margin-top: 2em;
+}
+
+
