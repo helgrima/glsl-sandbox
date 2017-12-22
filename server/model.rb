@@ -51,6 +51,26 @@ class Effects
     end
 end
 
+class Effect
+    attr_accessor :base_url
+    def initialize(base_url)
+        @base_url=base_url
+    end
+
+    def bind
+        binding
+    end
+
+    def base_url=(url)
+        @base_url = url
+    end
+
+    def base_url()
+        @base_url
+    end
+
+end
+
 class GlslDatabase
     attr_accessor :use_cloudinary
     def initialize

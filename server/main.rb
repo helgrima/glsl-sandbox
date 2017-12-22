@@ -16,6 +16,7 @@ configure do
     set :public_folder, 'server/assets'
 
     GALLERY=ERB.new(File.read('server/assets/gallery.html'))
+    EFFECT=ERB.new(File.read("server/assets/index.html"))
 
     $glsl=GlslDatabase.new
 
@@ -39,7 +40,8 @@ get '/' do
 end
 
 get '/e' do
-    send_file 'static/index.html'
+    ef=Effect.new(BASE_URL)
+    EFFECT.result(ef.bind)
 end
 
 get %r{/item/(\d+)([/.](\d+))?} do
