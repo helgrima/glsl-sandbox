@@ -52,10 +52,19 @@ class Effects
 end
 
 class GlslDatabase
+    attr_accessor :use_cloudinary
     def initialize
         connect_database
         initialize_counter
         initialize_cloudinary
+    end
+
+    def use_cloudinary=(use_cloudinary)
+        @use_cloudinary = use_cloudinary
+    end
+
+    def use_cloudinary()
+        @use_cloudinary
     end
 
     def increment_code_counter
@@ -75,12 +84,15 @@ class GlslDatabase
             :created_at => time,
             :code => code_data['code']
         }
+        if @use_cloudinary == true
+            res=Cloudinary::Uploader.upload(
+                code_data['image'],
+                :public_id => code_id.to_s)
 
-        res=Cloudinary::Uploader.upload(
-            code_data['image'],
-            :public_id => code_id.to_s)
-
-        image_url=res['url']
+            image_url=res['url']
+        else
+            image_url=code_data["image"]
+        end
 
         @code.find_and_modify({
             :query => { :_id => code_id },

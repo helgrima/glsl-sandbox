@@ -21,6 +21,7 @@ configure do
 
     EFFECTS_PER_PAGE=50
     BASE_URL="http://localhost:9292/"
+    USE_CLOUDINARY=false
 end
 
 get '/' do
@@ -30,8 +31,10 @@ get '/' do
         page=0
     end
 
+    $glsl.use_cloudinary = USE_CLOUDINARY
     ef=$glsl.get_page(page, EFFECTS_PER_PAGE)
     ef.base_url = BASE_URL
+    
     GALLERY.result(ef.bind)
 end
 
