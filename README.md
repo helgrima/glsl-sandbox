@@ -33,8 +33,10 @@ To run type in at projects folder
 
 If running on Linux, it is suggested that first you install rerun gem
 >gem install rerun
+
 And after that run
 >rerun 'rackup'
+
 This way ruby will catch all file changes and reload rack, so you can easily modify all files. NOTICE rerun is not supported by Windows
 
 Point your browser to http://localhost:9292
