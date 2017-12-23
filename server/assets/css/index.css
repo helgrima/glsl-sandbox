@@ -42,3 +42,28 @@ option {
     background-color: #000000;
 
 }
+
+/* Make room for user controls */
+.CodeMirror {
+    width: 80% !important;
+}
+
+#user-uniforms {
+    position: absolute;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0px;
+}
+
+#user-uniforms p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#user-uniforms span.title {
+    font-size: larger;
+}
+
+#user-uniforms input#uniform-name {
+    margin-right: 10px;
+}

@@ -120,7 +120,8 @@ void main( void ) {
 			var code, canvas, gl, buffer, currentProgram, vertexPosition, screenVertexPosition, panButton,
 			parameters = { startTime: Date.now(), time: 0, mouseX: 0.5, mouseY: 0.5, screenWidth: 0, screenHeight: 0 },
 			surface = { centerX: 0, centerY: 0, width: 1, height: 1, isPanning: false, isZooming: false, lastX: 0, lastY: 0 },
-			frontTarget, backTarget, screenProgram, getWebGL, resizer = {}, compileOnChangeCode = true;
+			frontTarget, backTarget, screenProgram, getWebGL, resizer = {}, compileOnChangeCode = true,
+			userUniformsPanel = null, userUniforms = [];
 
 			
 			
@@ -315,6 +316,37 @@ void main( void ) {
 					}
 				}, false );
 				
+				//Create user's uniforms
+				userUniformsPanel = document.createElement("div");
+				userUniformsPanel.id = "user-uniforms";
+				var userUniformsTitle = document.createElement("span");
+				userUniformsTitle.className = "title";
+				userUniformsTitle.innerHTML = "Custom uniforms";
+				userUniformsPanel.appendChild(userUniformsTitle);
+
+				var newUniformWrapper = document.createElement("div");
+				newUniformWrapper.id = "new-uniform";
+				var newUniformName = document.createElement("input");
+				newUniformName.type = "text";
+				newUniformName.id = "uniform-name";
+				newUniformName.addEventListener("keyup", function(event) {
+					if(event.keyCode == 13) {
+						createNewUserUniform();
+					}
+				});
+				newUniformWrapper.appendChild(newUniformName);
+
+				var newUniformCreate = document.createElement("a");
+				newUniformCreate.innerHTML = "+";
+				newUniformCreate.id = "uniform-create";
+				newUniformCreate.addEventListener("click", function(event) {
+					createNewUserUniform();
+				});
+
+				newUniformWrapper.appendChild(newUniformCreate);
+				userUniformsPanel.appendChild(newUniformWrapper);			
+				document.body.appendChild(userUniformsPanel);
+
 				if (gl) {
 
 					var surfaceMouseDown = function ( event ) {
@@ -584,6 +616,10 @@ void main( void ) {
 				cacheUniformLocation( program, 'backbuffer' );
 				cacheUniformLocation( program, 'surfaceSize' );
 
+				// cache user's uniforms
+				for(var i = 0; i < userUniforms.length; i++) {
+					cacheUniformLocation(program, userUniforms[i].name);
+				}
 				// Load program into GPU
 
 				gl.useProgram( currentProgram );
@@ -811,6 +847,11 @@ void main( void ) {
 				parameters.screenWidth = canvas.width;
 				parameters.screenHeight = canvas.height;
 
+				userUniformsPanel.style.top = code.getWrapperElement().style.top;
+				userUniformsPanel.style.right = code.getWrapperElement().style.left;
+				userUniformsPanel.style.width = (((window.innerWidth - resizer.currentWidth) * 4)) - 30 + "px";
+				userUniformsPanel.style.height = resizer.currentHeight + "px";
+
 				computeSurfaceCorners();
 
 				if (gl) {
@@ -822,6 +863,79 @@ void main( void ) {
 				}
 			}
 
+			function createNewUserUniform() {
+				var name = userUniformsPanel.getElementsByTagName("input")[0].value;
+					//Conduct regexp to check if name is correct variable
+					//At this point just assume that is it ok, as we don't
+					//have regexp to check.
+					if(typeof name == "undefined" || name == null || name == "") {
+						alert("Incorret variable name");
+						return;
+					}
+					
+					for(var i = 0; i < userUniforms.length; i++) {
+						var u = userUniforms[i];
+						if(u.name == name) {
+							alert("Variable with name " + name + " already exists");
+							return;
+						}
+					}
+					userUniforms.push({
+						name: name,
+						value: 0,
+						type: 1 //For possible datatypes in future
+					});
+					userUniformsPanel.getElementsByTagName("input")[0].value = "";
+					renderUserUniforms();
+			}
+
+			function renderUserUniforms() {
+				var table = userUniformsPanel.getElementsByTagName("table")[0];
+				if(typeof table != "undefined") {
+					userUniformsPanel.removeChild(table);
+				}
+
+				table = document.createElement("table");
+				for(var i = 0; i < userUniforms.length; i++) {
+					var u = userUniforms[i];
+					var row = document.createElement("tr");
+					var nameTd = document.createElement("td");
+					nameTd.innerText = u.name;
+
+					var valueTd = document.createElement("td");
+					var min = document.createElement("span");
+					min.innerText = "0";
+					valueTd.appendChild(min);
+					
+					var valueSlider = document.createElement("input");
+					valueSlider.type = "range";
+					valueSlider.min = 0;
+					valueSlider.max = 1;
+					valueSlider.step = 0.01;
+					valueSlider.value = u.value;
+					valueSlider.dataset.name = u.name;
+					valueSlider.addEventListener("input", function(event) {
+						for(var j = 0; j < userUniforms.length; j++) {
+							if(userUniforms[j].name == event.target.dataset.name) {
+								userUniforms[j].value = parseFloat(event.target.value);
+								break;
+							}
+						}
+						
+					});
+					valueTd.append(valueSlider);
+				
+					var max = document.createElement("span");
+					max.innerText = "1";
+					valueTd.appendChild(max);
+
+					row.appendChild(nameTd);
+					row.appendChild(valueTd);
+
+					table.appendChild(row);
+				}
+				userUniformsPanel.appendChild(table);
+			}
 			//
 
 			function animate() {
@@ -847,6 +961,11 @@ void main( void ) {
 				gl.uniform1i( currentProgram.uniformsCache[ 'backbuffer' ], 0 );
 				gl.uniform2f( currentProgram.uniformsCache[ 'surfaceSize' ], surface.width, surface.height );
 
+				// Set user's uniforms for custom shader
+				for(var i = 0; i < userUniforms.length; i++) {
+					var uuf = userUniforms[i];
+					gl.uniform1f(currentProgram.uniformsCache[uuf.name], uuf.value);
+				}
 				gl.bindBuffer( gl.ARRAY_BUFFER, surface.buffer );
 				gl.vertexAttribPointer( surface.positionAttribute, 2, gl.FLOAT, false, 0, 0 );
 				
