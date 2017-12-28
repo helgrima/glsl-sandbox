@@ -67,3 +67,41 @@ option {
 #user-uniforms input#uniform-name {
     margin-right: 10px;
 }
+
+.existing-uniform-wrapper {
+    margin-bottom: 5px;
+}
+
+.existing-uniform-wrapper span {
+    display: inline-block;
+}
+
+.existing-uniform-wrapper span:nth-child(1) {
+    width: 25%;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+}
+
+.existing-uniform-wrapper span:nth-child(2) {
+    width: 5%;
+    text-align: right;
+}
+
+.existing-uniform-wrapper input:nth-child(3) {
+    width: 30%;
+}
+
+.existing-uniform-wrapper span:nth-child(4) {
+    width: 5%;
+    text-align: left;
+}
+
+.existing-uniform-wrapper span:nth-child(5) {
+    width: 15%;
+    font-size: larger;
+    text-align: center;
+}
+
+.existing-uniform-wrapper a:nth-child(5) {
+    width: 20%;
+}

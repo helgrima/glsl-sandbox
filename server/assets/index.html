@@ -890,22 +890,27 @@ void main( void ) {
 			}
 
 			function renderUserUniforms() {
-				var table = userUniformsPanel.getElementsByTagName("table")[0];
-				if(typeof table != "undefined") {
-					userUniformsPanel.removeChild(table);
+				var wrapper = document.getElementById("existing-uniforms");
+				if(typeof wrapper != "undefined" && wrapper != null) {
+					userUniformsPanel.removeChild(wrapper);
 				}
 
-				table = document.createElement("table");
+				wrapper = document.createElement("div");
+				wrapper.id = "existing-uniforms";
 				for(var i = 0; i < userUniforms.length; i++) {
-					var u = userUniforms[i];
-					var row = document.createElement("tr");
-					var nameTd = document.createElement("td");
-					nameTd.innerText = u.name;
+					var uniformWrapper = document.createElement("div");
+					uniformWrapper.className = "existing-uniform-wrapper";
 
-					var valueTd = document.createElement("td");
+					var u = userUniforms[i];
+					
+					var name = document.createElement("span");
+					name.innerText = u.name;
+
+					uniformWrapper.appendChild(name);
+
 					var min = document.createElement("span");
 					min.innerText = "0";
-					valueTd.appendChild(min);
+					uniformWrapper.appendChild(min);
 					
 					var valueSlider = document.createElement("input");
 					valueSlider.type = "range";
@@ -918,23 +923,33 @@ void main( void ) {
 						for(var j = 0; j < userUniforms.length; j++) {
 							if(userUniforms[j].name == event.target.dataset.name) {
 								userUniforms[j].value = parseFloat(event.target.value);
+								userUniforms[j].valueSpan.innerText = event.target.value;
 								break;
 							}
 						}
 						
 					});
-					valueTd.append(valueSlider);
+					uniformWrapper.append(valueSlider);
 				
 					var max = document.createElement("span");
 					max.innerText = "1";
-					valueTd.appendChild(max);
+					uniformWrapper.appendChild(max);
 
-					row.appendChild(nameTd);
-					row.appendChild(valueTd);
+					
+					var value = document.createElement("span");
+					value.innerText = u.value;
+					u.valueSpan = value;
+					uniformWrapper.appendChild(value);
+					
+					var remove = document.createElement("a");
+					remove.innerText = "x";
+			
+					uniformWrapper.appendChild(remove);
+		
 
-					table.appendChild(row);
+					wrapper.appendChild(uniformWrapper);
 				}
-				userUniformsPanel.appendChild(table);
+				userUniformsPanel.appendChild(wrapper);
 			}
 			//
 
