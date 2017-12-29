@@ -113,13 +113,13 @@ end
 class Register
     attr_accessor :base_url
     attr_accessor :email
+    attr_accessor :email_error
+    attr_accessor :password_error
     attr_accessor :handle
-    attr_accessor :password
     attr_accessor :group
     
-    def initialize(base_url, group)
+    def initialize(base_url)
         @base_url=base_url
-        @group=group
     end
 
     def bind
@@ -142,6 +142,22 @@ class Register
         @email
     end
 
+    def email_error=(email_error)
+        @email_error = email_error
+    end
+
+    def email_error()
+        @email_error
+    end
+
+    def password_error=(password_error)
+        @password_error = password_error
+    end
+
+    def password_error()
+        @password_error
+    end
+
     def handle=(handle)
         @handle = handle
     end
@@ -150,12 +166,45 @@ class Register
         @handle
     end
 
-    def password=(password)
-        @password = password
+    def group=(group)
+        @group = group
     end
 
-    def password()
-        @password
+    def group()
+        @group
+    end
+
+end
+
+class RegisterComplete
+    attr_accessor :base_url
+    attr_accessor :group_exists
+    attr_accessor :group
+    
+    def initialize(base_url, group_exists, group)
+        @base_url=base_url
+        @group_exists = group_exists
+        @group = group
+    end
+
+    def bind
+        binding
+    end
+
+    def base_url=(url)
+        @base_url = url
+    end
+
+    def base_url()
+        @base_url
+    end
+
+    def group_exists=(group_exists)
+        @group_exists = group_exists
+    end
+
+    def group_exists()
+        @group_exists
     end
 
     def group=(group)
@@ -254,7 +303,8 @@ class GlslDatabase
             :created_at => Time.now,
             :modified_at => Time.now,
             :versions => [],
-            :user => code_data['user']
+            :user => code_data['user'],
+            :visibility => Visibility::ALL
         }
 
         if code_data['parent']
@@ -328,6 +378,40 @@ class GlslDatabase
         end
     end
 
+    def group(group)
+        e = true
+        g = @groups.find_one({:name => group})
+        if !g
+            g = @groups.insert({
+                :name => group,
+                :created_at => Time.now
+            })
+            e = false
+        end
+        {:group => g, :existing => e}
+    end
+
+    def groups(term = nil)
+        if term
+            @groups.find({ :name => /^#{term}/ })
+        else
+            @groups.find()
+        end
+    end
+
+    def register_user(user)
+        @users.insert(user)
+    end
+
+    def user_exists(email)
+        u = @users.find_one({:email => email})
+        if u
+            true
+        else
+            false
+        end
+    end
+
 private
 
     def connect_database
@@ -337,6 +421,8 @@ private
         @versions=@db.collection('versions')
         @code=@db.collection('code')
         @counters=@db.collection('counters')
+        @users=@db.collection("users")
+        @groups=@db.collection("groups")
     end
 
     def initialize_counter
@@ -356,4 +442,17 @@ private
             config.api_secret = ""
           end   
     end
+end
+
+module Visibility 
+    ALL = 1
+    AUTHOR = 2
+    GROUP = 4
+end
+
+module UserLevel
+    BASIC = 1
+    GROUP_MEMBER = 2
+    GROUP_ADMIN = 3
+    TOTAL_ADMIN = 4
 end

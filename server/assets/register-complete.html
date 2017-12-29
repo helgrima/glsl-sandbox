@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>GLSL Sandbox Gallery</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+		<link rel="stylesheet" href="<%= base_url %>css/default.css">
+		<link rel="stylesheet" href="<%= base_url %>css/login-register.css">
+	
+	</head>
+	<body>
+
+	<div id="login-wrapper">
+		<h1>GLSL Account created!</h1>
+		<% if group_exists %>
+			<h2>Welcome to <%= group %>! Group administrator is informed to verify your account</h2>
+		<% else %>
+			<h2>You are first member of <%= group %>, and therefore you are administrator of this group</h2>
+		<% end %>
+		<div id="links-and-controls">
+			<a href="<%= base_url %>">Back to gallery</a> <a href="<%= base_url %>e">Create new effect!</a>
+		</div>
+		
+	</div>
+
+	</body>
+</html>

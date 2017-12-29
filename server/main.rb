@@ -5,6 +5,7 @@ require 'mongo'
 require 'json'
 require 'erb'
 require 'cloudinary'
+require "digest"
 
 $: << './server'
 
@@ -19,12 +20,14 @@ configure do
     EFFECT=ERB.new(File.read("server/assets/index.html"))
     LOGIN=ERB.new(File.read("server/assets/login.html"))
     REGISTER=ERB.new(File.read("server/assets/register.html"))
+    REGISTER_COMPLETE=ERB.new(File.read("server/assets/register-complete.html"))
 
     $glsl=GlslDatabase.new
 
     EFFECTS_PER_PAGE=50
     BASE_URL="http://localhost:9292/"
     USE_CLOUDINARY=false
+    PASSWORD_SALT=""
 end
 
 get '/' do
@@ -76,16 +79,58 @@ post "/login" do
 end
 
 get "/register" do
-    r=Register.new(BASE_URL, "")
+    r=Register.new(BASE_URL)
     REGISTER.result(r.bind)
 end
 
 post "/register" do
-    # register user here
+    errors = {
+        :exists => false,
+        :password_error => "",
+        :email_error => ""
+    }
+    # check password and retype password match       
+    if params[:password] != params[:retype]
+        errors[:exists] = true
+        errors[:password_error] = "Password do not match"
+    end
+
+    # check if email is already used
+    if $glsl.user_exists(params[:email])
+        errors[:exists] = true
+        errors[:email_error] = "Account is already registered with this email"
+    end
+
+    if errors[:exists]
+        r = Register.new(BASE_URL)
+        r.email = params[:email]
+        r.email_error = errors[:email_error]
+        r.password_error = errors[:password_error]
+        r.handle = params[:username]
+        r.group = params[:group]
+        REGISTER.result(r.bind)
+    else
+        # check if group exists, and if not create it
+        g = $glsl.group(params[:group])
+        user = {
+            :email => params[:email],
+            :handle => params[:username],
+            :password => Digest::SHA256.hexdigest(params[:password] + PASSWORD_SALT),
+            :group => g[:group],
+            :level => g[:existing] ? UserLevel::BASIC : UserLevel::GROUP_ADMIN
+        }
+        
+        $glsl.register_user(user)
+
+        rc=RegisterComplete.new(BASE_URL, g[:existing], params[:group])
+        REGISTER_COMPLETE.result(rc.bind)
+    end
+
 end
 
 get "/register/groups" do 
-    g = ["tähtituho", "bytereapers", "doomreapers", "illusions", "demogroup1"]
+    g = $glsl.groups(params[:term]).limit(20).to_a
+    g = g.map { |grp| grp["name"] }
     g.to_json
 end
 # redirects
