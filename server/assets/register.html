@@ -14,15 +14,15 @@
 
 	<div id="login-wrapper">
 		<h1>GLSL Register</h1>
-		<form action="<%= base_url %>login" method="POST">
+		<form action="<%= base_url %>register" method="POST">
 			<label for="handle" class="separate">E-mail:</label>
 			<input type="text" name="email" id="email" class="separate" />
 			<label for="handle" class="separate">Handle:</label>
 			<input type="text" name="username" id="username" class="separate" />
 			<label for="password" class="separate" >Password:</label>
 			<input type="password" name="password" id="password" class="separate" />
-			<label for="retype-password" class="separate">Retype password:</label>
-			<input type="password" name="retype-password" id="retype-password" class="separate" />
+			<label for="retype" class="separate">Retype password:</label>
+			<input type="password" name="retype" id="retype" class="separate" />
 			<label for="group" class="separate">Group:</label>
 			<input type="text" name="group" id="group" class="separate">
 			<button type="submit" class="separate">Register</button>
