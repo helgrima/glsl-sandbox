@@ -115,9 +115,11 @@ class Register
     attr_accessor :email
     attr_accessor :handle
     attr_accessor :password
+    attr_accessor :group
     
-    def initialize(base_url)
+    def initialize(base_url, group)
         @base_url=base_url
+        @group=group
     end
 
     def bind
@@ -154,6 +156,14 @@ class Register
 
     def password()
         @password
+    end
+
+    def group=(group)
+        @group = group
+    end
+
+    def group()
+        @group
     end
 
 end

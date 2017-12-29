@@ -4,14 +4,14 @@
 		<title>GLSL Sandbox Gallery</title>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-		<link rel="stylesheet" href="css/default.css">
-		<link rel="stylesheet" href="css/login-register.css">
+		<link rel="stylesheet" href="<%= base_url %>css/default.css">
+		<link rel="stylesheet" href="<%= base_url %>css/login-register.css">
 	</head>
 	<body>
 
 	<div id="login-wrapper">
 		<h1>GLSL Login</h1>
-		<form action="/login" method="POST">
+		<form action="<%= base_url %>login" method="POST">
 			<label for="handle" class="separate">Handle:</label>
 			<input type="text" name="username" id="username" class="separate" />
 			<label for="password"class="separate" >Password:</label>

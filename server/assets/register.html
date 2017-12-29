@@ -4,14 +4,17 @@
 		<title>GLSL Sandbox Gallery</title>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
-		<link rel="stylesheet" href="css/default.css">
-		<link rel="stylesheet" href="css/login-register.css">
+		<link rel="stylesheet" href="<%= base_url %>css/default.css">
+		<link rel="stylesheet" href="<%= base_url %>css/login-register.css">
+		<link rel="stylesheet" href="<%= base_url %>css/auto-complete.css">
+		<script type="text/javascript" src="<%= base_url %>js/jquery.js"></script>
+		<script type="text/javascript" src="<%= base_url %>js/auto-complete.min.js"></script>
 	</head>
 	<body>
 
 	<div id="login-wrapper">
 		<h1>GLSL Register</h1>
-		<form action="/login" method="POST">
+		<form action="<%= base_url %>login" method="POST">
 			<label for="handle" class="separate">E-mail:</label>
 			<input type="text" name="email" id="email" class="separate" />
 			<label for="handle" class="separate">Handle:</label>
@@ -21,11 +24,7 @@
 			<label for="retype-password" class="separate">Retype password:</label>
 			<input type="password" name="retype-password" id="retype-password" class="separate" />
 			<label for="group" class="separate">Group:</label>
-			<select name="group" id="group" class="separate">
-				<option value="1">Group 1</option>
-				<option value="2">Group 2</option>
-				<option value="3">Group 3</option>
-			</select>
+			<input type="text" name="group" id="group" class="separate">
 			<button type="submit" class="separate">Register</button>
 		</form>
 		<div id="links-and-controls">
@@ -33,5 +32,16 @@
 		</div>
 		
 	</div>
+	<script type="text/javascript">
+		var ac = new autoComplete({
+			selector: "input[name='group']",
+			minChars: 2,
+			source: function(term, suggest) {
+				$.getJSON("<%= base_url %>register/groups", {term: term}, function(data) {
+					suggest(data);
+				});
+			}
+		});
+	</script>
 	</body>
 </html>

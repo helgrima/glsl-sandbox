@@ -76,12 +76,17 @@ post "/login" do
 end
 
 get "/register" do
-    r=Register.new(BASE_URL)
+    r=Register.new(BASE_URL, "")
     REGISTER.result(r.bind)
 end
 
 post "/register" do
     # register user here
+end
+
+get "/register/groups" do 
+    g = ["tähtituho", "bytereapers", "doomreapers", "illusions", "demogroup1"]
+    g.to_json
 end
 # redirects
 
